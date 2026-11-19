@@ -41,3 +41,19 @@ This project implements a pipeline for human activity recognition using pose est
     Run 6realtime.py to perform live activity recognition providing your video path
 
    .
+
+
+**Results**
+
+Same stratified 70/30 split (`random_state=42`), 2,539 clips, 7 classes, 42 engineered features.
+Reproduced by `5train_model.py`, which also writes `model_comparison.csv`:
+
+| Model | Accuracy | Macro-F1 |
+|---|---|---|
+| Logistic Regression (scaled) | 66.1% | 0.640 |
+| SVM, RBF (scaled) | 74.8% | 0.737 |
+| Random Forest | 76.9% | 0.766 |
+| XGBoost | 79.3% | 0.785 |
+| **Stacking ensemble** (XGBoost + RF + scaled SVM, Logistic Regression meta-classifier) | **79.9%** | **0.794** |
+
+5-fold cross-validation on the training set: 77.4% ± 1.0%. Feature scaling matters for the SVM: unscaled, it reaches only about 56%, because angles (0-180) and velocities (about 0.01) sit on very different scales.
